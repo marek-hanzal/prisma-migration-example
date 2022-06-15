@@ -1,0 +1,100 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions", "extendedIndexes", "improvedQueryRaw"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Next Auth Stuff
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  tariffId      String?
+  tariff        Tariff?   @relation(fields: [tariffId], references: [id])
+
+  accounts          Account[]
+  files             File[]
+  jobs              Job[]
+  Transaction       Transaction[]
+  Comment           Comment[]
+  UserToken         UserToken[]
+  Liquid            Liquid[]
+  Metric            Metric[]
+  Build             Build[]
+  AtomizerInventory AtomizerInventory[]
+  CellInventory     CellInventory[]
+  ModInventory      ModInventory[]
+  CottonInventory   CottonInventory[]
+  VoucherInventory  VoucherInventory[]
+  AromaInventory    AromaInventory[]
+  BoosterInventory  BoosterInventory[]
+  BaseInventory     BaseInventory[]
+  WireInventory     WireInventory[]
+  MixtureInventory  MixtureInventory[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Leight Core Stuff
+
+model Token {
+  id    String    @id @default(cuid())
+  name  String    @unique
+  until DateTime?
+
+  UserToken UserToken[]
+}
+
+model UserToken {
+  id      String @id @default(cuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenId String
+  token   Token  @relation(fields: [tokenId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tokenId])
+}
+
+model Translation {
+  id       String @id @default(cuid())
+  language String @db.VarChar(32)
+  label    String @db.Text
+  text     String @db.Text
+  hash     String @db.VarChar(128)
+
+  @@unique([language, hash])
+}

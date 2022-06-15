@@ -1,0 +1,60 @@
+{
+	"compilerOptions": {
+		"target": "ES2021",
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"ES2021"
+		],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"useDefineForClassFields": true,
+		"forceConsistentCasingInFileNames": true,
+		"disableSolutionSearching": true,
+		"checkJs": true,
+		"diagnostics": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "ES2020",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"baseUrl": "src",
+		"paths": {
+			"@/puff-smith": [
+				"."
+			],
+			"@/puff-smith/*": [
+				"./*"
+			],
+			"@/sdk/*": [
+				"./sdk/*"
+			]
+		},
+		"incremental": true
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx"
+	],
+	"exclude": [
+		"node_modules",
+		"_pages",
+		"_component",
+		"_site",
+		"tmp"
+	],
+	"ts-node": {
+		"transpileOnly": true,
+		"esm": true,
+		"require": [
+			"tsconfig-paths/register"
+		],
+		"compilerOptions": {
+			"module": "CommonJS"
+		}
+	}
+}
